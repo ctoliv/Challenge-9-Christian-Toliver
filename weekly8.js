@@ -524,13 +524,7 @@ gltfLoader.load(
         collisionModel
         );
 
-        const collisionHelper =
-        new THREE.Box3Helper(
-        obstacleBox,
-        0xff0000
-    );
-
-        scene.add(collisionHelper);
+        
     }
 ); 
 
@@ -659,7 +653,7 @@ function animate() {
     playerMixer.update(delta);
 }
 
-    if(player && collisionModel)
+    if(player)
     {
         const oldPosition =
         player.position.clone();
@@ -690,20 +684,23 @@ function animate() {
 
         playerBox.setFromObject(player);
 
-    obstacleBox.setFromObject(
-        collisionModel
-    );
+        if(collisionModel)
+        {
+            obstacleBox.setFromObject(
+                collisionModel
+            );
 
-    if(playerBox.intersectsBox(obstacleBox))
-    {
-        console.log("Collision!");
+            if(playerBox.intersectsBox(obstacleBox))
+            {
+                console.log("Collision!");
 
-        player.position.copy(
-            oldPosition
-        );
+                player.position.copy(
+                    oldPosition
+                );
+            }
+        }
     }
 
-}
     controls.update();
 
     renderer.render(scene, camera);
