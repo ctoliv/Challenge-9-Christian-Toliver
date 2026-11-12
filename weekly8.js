@@ -49,7 +49,11 @@ controls.dampingFactor = 0.05;
 
 const gltfLoader =
     new GLTFLoader();
+let animatedModel;
+let mixer;
 
+const clock =
+    new THREE.Clock();
 // ----------------------------------------------------
 // Texture Loader
 // ----------------------------------------------------
@@ -439,6 +443,41 @@ gltfLoader.load(
 );
 
 // animated model goes here
+gltfLoader.load(
+    "./models/animatedKnight.glb",
+
+    function(gltf)
+    {
+        animatedModel =
+            gltf.scene;
+
+        animatedModel.position.set(
+            -2,
+            0,
+            1
+        );
+
+        animatedModel.scale.set(
+            0.5,
+            0.5,
+            0.5
+        );
+
+        scene.add(animatedModel);
+
+        mixer =
+            new THREE.AnimationMixer(
+                animatedModel
+            );
+
+        const action =
+            mixer.clipAction(
+                gltf.animations[0]
+            );
+
+        action.play();
+    }
+);
 
 // collision model goes here
 
@@ -506,7 +545,13 @@ function animate() {
 
     requestAnimationFrame(animate);
 
+    const delta =
+        clock.getDelta();
 
+    if(mixer)
+    {
+        mixer.update(delta);
+    }
 
     controls.update();
 
