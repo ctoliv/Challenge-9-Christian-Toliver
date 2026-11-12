@@ -20,7 +20,7 @@ const camera = new THREE.PerspectiveCamera(
     1000
 );
 
-camera.position.set(20, 15, 20);
+camera.position.set(0, 20, 30);
 
 // ----------------------------------------------------
 // Renderer
@@ -62,6 +62,11 @@ const playerBox =
 
 const obstacleBox =
     new THREE.Box3();
+
+let player;
+let playerMixer;
+
+const keys = {};   
 // ----------------------------------------------------
 // Texture Loader
 // ----------------------------------------------------
@@ -516,6 +521,42 @@ gltfLoader.load(
 ); 
 
 // player character goes here
+gltfLoader.load(
+    "./models/player.glb",
+
+    function(gltf)
+    {
+        player =
+            gltf.scene;
+
+        player.position.set(
+            0,
+            0,
+            10
+        );
+
+        player.scale.setScalar(
+            2
+        );
+
+        player.rotation.y =
+        Math.PI;
+
+        scene.add(player);
+
+        playerMixer =
+            new THREE.AnimationMixer(
+                player
+            );
+
+        const playerAction =
+            playerMixer.clipAction(
+                gltf.animations[0]
+            );
+
+        playerAction.play();
+    }
+);
 
 // ----------------------------------------------------
 // Ambient Light
@@ -572,6 +613,19 @@ window.addEventListener("resize", () => {
     );
 });
 
+window.addEventListener(
+    "keydown",
+    (event) => {
+        keys[event.key] = true;
+    }
+);
+
+window.addEventListener(
+    "keyup",
+    (event) => {
+        keys[event.key] = false;
+    }
+);
 // ----------------------------------------------------
 // Animation Loop
 // ----------------------------------------------------
@@ -586,7 +640,37 @@ function animate() {
     {
         mixer.update(delta);
     }
+    if(playerMixer)
+{
+    playerMixer.update(delta);
+}
 
+    if(player)
+    {
+        if(keys["ArrowUp"])
+        {
+            player.position.z -= 0.1;
+            player.rotation.y = Math.PI;
+        }
+
+        if(keys["ArrowDown"])
+        {
+            player.position.z += 0.1;
+            player.rotation.y = 0;
+        }
+
+        if(keys["ArrowLeft"])
+        {
+            player.position.x -= 0.1;
+            player.rotation.y = -Math.PI / 2;
+        }
+
+        if(keys["ArrowRight"])
+        {
+            player.position.x += 0.1;
+            player.rotation.y = Math.PI / 2;
+        }
+}
     controls.update();
 
     renderer.render(scene, camera);
