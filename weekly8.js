@@ -517,6 +517,20 @@ gltfLoader.load(
         scene.add(
             collisionModel
         );
+        
+        collisionModel.updateMatrixWorld(true);
+
+        obstacleBox.setFromObject(
+        collisionModel
+        );
+
+        const collisionHelper =
+        new THREE.Box3Helper(
+        obstacleBox,
+        0xff0000
+    );
+
+        scene.add(collisionHelper);
     }
 ); 
 
@@ -532,7 +546,7 @@ gltfLoader.load(
         player.position.set(
             0,
             0,
-            10
+            20
         );
 
         player.scale.setScalar(
@@ -645,8 +659,11 @@ function animate() {
     playerMixer.update(delta);
 }
 
-    if(player)
+    if(player && collisionModel)
     {
+        const oldPosition =
+        player.position.clone();
+
         if(keys["ArrowUp"])
         {
             player.position.z -= 0.1;
@@ -670,6 +687,22 @@ function animate() {
             player.position.x += 0.1;
             player.rotation.y = Math.PI / 2;
         }
+
+        playerBox.setFromObject(player);
+
+    obstacleBox.setFromObject(
+        collisionModel
+    );
+
+    if(playerBox.intersectsBox(obstacleBox))
+    {
+        console.log("Collision!");
+
+        player.position.copy(
+            oldPosition
+        );
+    }
+
 }
     controls.update();
 
