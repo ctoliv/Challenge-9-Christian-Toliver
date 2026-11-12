@@ -54,6 +54,14 @@ let mixer;
 
 const clock =
     new THREE.Clock();
+
+let collisionModel;
+
+const playerBox =
+    new THREE.Box3();
+
+const obstacleBox =
+    new THREE.Box3();
 // ----------------------------------------------------
 // Texture Loader
 // ----------------------------------------------------
@@ -480,6 +488,32 @@ gltfLoader.load(
 );
 
 // collision model goes here
+gltfLoader.load(
+    "./models/collisionWall.glb",
+
+    function(gltf)
+    {
+        collisionModel =
+            gltf.scene;
+
+        collisionModel.position.set(
+            0,
+            0,
+            7
+        );
+
+        collisionModel.scale.setScalar(
+            4
+        );
+        
+        collisionModel.rotation.y =
+         Math.PI / 2;
+
+        scene.add(
+            collisionModel
+        );
+    }
+); 
 
 // player character goes here
 
