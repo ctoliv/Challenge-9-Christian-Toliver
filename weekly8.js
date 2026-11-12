@@ -2,6 +2,8 @@ import * as THREE from 'three';
 
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
 // ----------------------------------------------------
 // Scene
 // ----------------------------------------------------
@@ -40,6 +42,14 @@ const controls = new OrbitControls(
 
 controls.enableDamping = true;
 controls.dampingFactor = 0.05;
+
+// ----------------------------------------------------
+// GLTF Model Loader
+// ----------------------------------------------------
+
+const gltfLoader =
+    new GLTFLoader();
+
 // ----------------------------------------------------
 // Texture Loader
 // ----------------------------------------------------
@@ -397,6 +407,43 @@ const bannerFinial = new THREE.Mesh(
 bannerFinial.position.set(4.55, 8.4, -10.2);
 bannerFinial.castShadow = true;
 scene.add(bannerFinial);
+
+
+// ----------------------------------------------------
+// Imported Models
+// ----------------------------------------------------
+
+// decorative model goes here
+gltfLoader.load(
+    "./models/statue.glb",
+
+    function(gltf)
+    {
+        const statue =
+            gltf.scene;
+
+        statue.position.set(
+            -6,
+            0,
+            -7
+        );
+
+        statue.scale.set(
+            2,
+            2,
+            2
+        );
+
+        scene.add(statue);
+    }
+);
+
+// animated model goes here
+
+// collision model goes here
+
+// player character goes here
+
 // ----------------------------------------------------
 // Ambient Light
 // ----------------------------------------------------
