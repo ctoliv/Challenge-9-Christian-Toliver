@@ -698,6 +698,19 @@ function animate() {
                 );
             }
         }
+         player.position.x =
+        THREE.MathUtils.clamp(
+            player.position.x,
+            -15,
+            15
+        );
+
+    player.position.z =
+        THREE.MathUtils.clamp(
+            player.position.z,
+            -5,
+            20
+        );
     }
 
     controls.update();
