@@ -511,8 +511,7 @@ gltfLoader.load(
             4
         );
         
-        collisionModel.rotation.y =
-         Math.PI / 2;
+        
 
         scene.add(
             collisionModel
